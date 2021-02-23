@@ -33,8 +33,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-    animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
-    animation = Tween<double>(begin: 0.0, end: 500.0).animate(animationController);
+    animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 3500));
+    animation = CurvedAnimation(parent: animationController, curve: Curves.bounceOut);
     animationColor = ColorTween(begin: Colors.white, end: Colors.blue,).animate(animationController);
 
 
@@ -66,8 +66,9 @@ class AnimatedLogo extends AnimatedWidget {
   Widget build(BuildContext context) {
     final Animation<double> animation = listenable;
     return Transform.scale(
-      scale: animation.value,
-      child: FlutterLogo(),
+      scale: animation.value*50,
+      child: FlutterLogo()
+
 
     );
   }
