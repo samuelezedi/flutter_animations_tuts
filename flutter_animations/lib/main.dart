@@ -34,17 +34,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
-    animation = Tween<double>(begin: 20.0, end: 100.0).animate(animationController);
+    animation = Tween<double>(begin: 0.0, end: 500.0).animate(animationController);
     animationColor = ColorTween(begin: Colors.white, end: Colors.blue,).animate(animationController);
 
-    animation.addListener(() {
-      setState(() {
-        print(animation.value.toString());
-      });
-    });
+
 
     animation.addStatusListener((status) {
-      print(status);
+      if(status == AnimationStatus.completed){
+        animationController.reverse();
+      } else if(status == AnimationStatus.dismissed){
+        animationController.forward();
+      }
     });
 
     animationController.forward();
@@ -53,10 +53,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Center(child: Container(
-      width: animation.value,
-      height: animation.value,
-      color: animationColor.value,
-      child: FlutterLogo(),
+     child: AnimatedLogo(animation: animation,),
     ));
+  }
+}
+
+class AnimatedLogo extends AnimatedWidget {
+  AnimatedLogo({Key key, Animation animation})
+  : super(key: key, listenable: animation);
+
+  @override
+  Widget build(BuildContext context) {
+    final Animation<double> animation = listenable;
+    return Transform.scale(
+      scale: animation.value,
+      child: FlutterLogo(),
+
+    );
   }
 }
