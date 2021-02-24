@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "143296996849",
+    "project_id": "azula-1129c",
+    "storage_bucket": "azula-1129c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143296996849:android:39db7a0fd795269cff1050",
+        "android_client_info": {
+          "package_name": "test.tester.azula_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "143296996849-hm2h00fl5v559q9hkk5stlhp1q8cj796.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvbxF4Of3d85vI4f2azNLzQoqPgFHAQIA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "143296996849-hm2h00fl5v559q9hkk5stlhp1q8cj796.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "143296996849-l16r5e9tjqmrrmjl3cn0vqt1t52c71ei.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "test.tester.azulaapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

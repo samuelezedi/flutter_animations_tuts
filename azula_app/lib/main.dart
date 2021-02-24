@@ -1,6 +1,12 @@
+
+import 'package:azula_app/screens/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+var brightness = SchedulerBinding.instance.window.platformBrightness;
 
 void main() {
+
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -9,27 +15,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Azula',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-
+      fontFamily: 'MavenPro',
         primarySwatch: Colors.blue,
 
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Home(),
+      home: Splash(),
     );
-  }
-}
-
-
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(width:100,height:100,child: FlutterLogo(),);
   }
 }

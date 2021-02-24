@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>143296996849-l16r5e9tjqmrrmjl3cn0vqt1t52c71ei.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.143296996849-l16r5e9tjqmrrmjl3cn0vqt1t52c71ei</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAhUz0m7L-O1XD3J5Zr5p-J-nOV6ePLhQw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>143296996849</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>test.tester.azulaapp</string>
+	<key>PROJECT_ID</key>
+	<string>azula-1129c</string>
+	<key>STORAGE_BUCKET</key>
+	<string>azula-1129c.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:143296996849:ios:2e8b6e37b1fb5a55ff1050</string>
+</dict>
+</plist>
