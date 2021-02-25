@@ -1,5 +1,7 @@
+
 import 'package:azula_app/main.dart';
-import 'package:azula_app/utils/session.dart';
+import 'package:azula_app/screens/settings.dart';
+import 'package:azula_app/screens/splash.dart';
 import 'package:azula_app/utils/theming.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,12 +25,13 @@ class _HomeState extends State<Home> {
   }
 
   Future<String> getUser()async{
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    if(user == null){
+    FirebaseUser usr = await FirebaseAuth.instance.currentUser();
+    if(usr == null){
       SharedPreferences session = await SharedPreferences.getInstance();
       return session.getString('phoneId');
     } else {
-      return user.email;
+      user = usr;
+      return usr.email;
     }
   }
   @override
@@ -63,6 +66,11 @@ class _HomeState extends State<Home> {
                 ),
 
               ])),
+          actions: [
+            IconButton(icon: Icon(Icons.menu_rounded), color: Theming.returnItemColor(brightness,colorIfWhite: Colors.black12,colorIfDark: Colors.white),onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));
+            })
+          ],
         ),
         body: Column(
           children: [

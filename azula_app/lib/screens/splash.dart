@@ -1,11 +1,13 @@
-import 'package:azula_app/screens/home.dart';
-import 'package:azula_app/utils/theming.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
+import 'home.dart';
 import 'login.dart';
 FirebaseUser user;
+String phoneUser;
 
 class Splash extends StatefulWidget {
   @override
@@ -22,7 +24,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
     animation =
         CurvedAnimation(parent: animationController, curve: Curves.easeOut);
     animationColor = ColorTween(
@@ -36,9 +38,15 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
 
     animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
+        // animationController.dispose();
         if (user == null) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Login()));
+          if(phoneUser!=null){
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Home()));
+          } else {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Login()));
+          }
         } else {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Home()));
@@ -57,11 +65,27 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
   }
 
   Future<int> checkAuthentication() async {
-    await Future.delayed(Duration(seconds: 4));
+    await Future.delayed(Duration(seconds: 2));
     FirebaseUser usr = await FirebaseAuth.instance.currentUser();
+
+    if(usr==null){
+      SharedPreferences local = await SharedPreferences.getInstance();
+      if(local.getString('phoneId')!=null){
+        phoneUser = local.getString('phoneId');
+      }
+    }
     user = usr;
     return 1;
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    animationController.dispose();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +100,9 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
           future: checkAuthentication(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+
               animationController.forward();
+
               return Center(
                   child: Container(
                 child: Transform.scale(

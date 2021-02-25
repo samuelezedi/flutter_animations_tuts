@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+
+import 'package:azula_app/screens/splash.dart';
 import 'package:azula_app/utils/animation.dart';
 import 'package:azula_app/utils/random.dart';
-import 'package:azula_app/utils/session.dart';
 import 'package:azula_app/utils/theming.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -63,9 +64,17 @@ class _LoginState extends State<Login> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    subscription.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
         brightness: Theming.statusBarColor(brightness),
@@ -130,15 +139,23 @@ class _LoginState extends State<Login> {
                     onPressed: () async {
                       if (!googleSignButtonPressed) {
                         FirebaseUser u = await googleSignIn();
-                        Firestore.instance.collection('users').add({
-                          'email': u.email,
-                          'name': u.displayName,
-                          'timestamp': Timestamp.now(),
-                        });
+                        SharedPreferences local = await SharedPreferences.getInstance();
+                        QuerySnapshot check = await Firestore.instance.collection('users').where('email', isEqualTo: u.email).getDocuments();
+
+                        if(check.documents.length==0){
+                          Firestore.instance.collection('users').add({
+                            'email': u.email,
+                            'name': u.displayName,
+                            'timestamp': Timestamp.now(),
+                          });
+                        }
+
+                        checkIfAccountAddedWhenLocal(local);
+
                         setState(() {
                           googleSignButtonPressed = false;
                         });
-                        Navigator.push(context,
+                        Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) => Home()));
                       }
                     },
@@ -218,6 +235,7 @@ class _LoginState extends State<Login> {
                               child: SamAnimations.shake(
                                 begin: -2,
                                 end: 2,
+                                shakeType: ShakeType.Horizonatally,
                                 duration: Duration(milliseconds: 500),
                                 child: IconButton(
                                     icon: Icon(LineIcons.arrowRight),
@@ -307,6 +325,22 @@ class _LoginState extends State<Login> {
           builder: (context) {
             return widget;
           });
+    }
+  }
+
+  checkIfAccountAddedWhenLocal(SharedPreferences local) async {
+    Firestore fs = Firestore.instance;
+    var usr=local.getString('phoneId');
+    if(usr != null){
+      QuerySnapshot check = await fs.collection('codes').where('userId', isEqualTo: usr).getDocuments();
+      if(check.documents.length>0){
+        var batch = fs.batch();
+        for(int i = 0;i<check.documents.length;i++){
+          DocumentSnapshot d = check.documents[i];
+          batch.updateData(fs.collection('codes').document(d.documentID), {'userId':user.email});
+        }
+        batch.commit();
+      }
     }
   }
 }
