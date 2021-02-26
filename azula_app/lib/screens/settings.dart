@@ -1,3 +1,7 @@
+
+import 'dart:io';
+
+import 'package:azula_app/screens/about.dart';
 import 'package:azula_app/screens/login.dart';
 import 'package:azula_app/screens/splash.dart';
 import 'package:azula_app/utils/theming.dart';
@@ -6,10 +10,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
 
-class Settings extends StatelessWidget {
+class Settings extends StatefulWidget {
+  @override
+  _SettingsState createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+
   GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -18,14 +29,14 @@ class Settings extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theming.returnColor(brightness), 
       appBar: AppBar(
-        backgroundColor: Theming.returnColor(brightness),
+        backgroundColor: Theming.returnColorDarker(brightness),
         brightness: Theming.statusBarColor(brightness,forDark: true),
         centerTitle: true,
         leading: IconButton(
           onPressed: (){
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios,color: Colors.white,),
+          icon: Icon(Icons.arrow_back_ios,color: Theming.returnItemColor(brightness),size: 15,),
         ),
         title: RichText(
             text: TextSpan(children: <TextSpan>[
@@ -48,17 +59,11 @@ class Settings extends StatelessWidget {
       ),
       body: Column(
         children: [
-          ListTile(
-            onTap: (){
 
-            },
-            leading: Icon(LineIcons.cogs,color: Theming.returnItemColor(brightness),),
-            title: Text('Settings',style: TextStyle(color: Theming.returnTextColor(brightness))),
-          ),
           ListTile(
 
             onTap: (){
-
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>About()));
             },
             leading: Icon(LineIcons.question,color: Theming.returnItemColor(brightness),),
             title: Text('About',style: TextStyle(color: Theming.returnTextColor(brightness))),
@@ -81,6 +86,54 @@ class Settings extends StatelessWidget {
             leading: Icon(LineIcons.lockOpen,color: Theming.returnItemColor(brightness),),
             title: Text('Login',style: TextStyle(color: Theming.returnTextColor(brightness))),
           ),
+
+          Expanded(
+            child: Container(),
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children:[
+              IconButton(
+                onPressed: ()async{
+                  SharedPreferences local = await SharedPreferences.getInstance();
+                  var dark =local.getBool('isDark');
+                  if(dark!=null){
+                    if(dark){
+                      brightness = Brightness.dark;
+                      local.setBool('isDark', false);
+                    } else {
+                      brightness = Brightness.light;
+                      local.setBool('isDark', true);
+                    }
+                  } else{
+                    if(brightness == Brightness.dark){
+                      brightness = Brightness.light;
+                      local.setBool('isDark', true);
+                    } else{
+                      brightness = Brightness.dark;
+                      local.setBool('isDark', false);
+                    }
+                  }
+                  setState(() {
+
+                  });
+                },
+                icon: Icon(LineIcons.lightbulb,color: Theming.returnItemColor(brightness),size: 35,),
+              ),
+              InkWell(
+                onTap: (){
+
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text("Current version "+appSettings.data['version'],style: TextStyle(fontWeight:FontWeight.bold,color: Theming.returnTextColor(brightness)),)
+                )
+              )
+            ]
+          ),
+
+          Platform.isIOS?SizedBox(height: 15,):Container()
 
         ],
       ),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-
 import 'package:azula_app/screens/splash.dart';
 import 'package:azula_app/utils/animation.dart';
 import 'package:azula_app/utils/random.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -139,10 +137,14 @@ class _LoginState extends State<Login> {
                     onPressed: () async {
                       if (!googleSignButtonPressed) {
                         FirebaseUser u = await googleSignIn();
-                        SharedPreferences local = await SharedPreferences.getInstance();
-                        QuerySnapshot check = await Firestore.instance.collection('users').where('email', isEqualTo: u.email).getDocuments();
+                        SharedPreferences local =
+                            await SharedPreferences.getInstance();
+                        QuerySnapshot check = await Firestore.instance
+                            .collection('users')
+                            .where('email', isEqualTo: u.email)
+                            .getDocuments();
 
-                        if(check.documents.length==0){
+                        if (check.documents.length == 0) {
                           Firestore.instance.collection('users').add({
                             'email': u.email,
                             'name': u.displayName,
@@ -155,6 +157,7 @@ class _LoginState extends State<Login> {
                         setState(() {
                           googleSignButtonPressed = false;
                         });
+
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) => Home()));
                       }
@@ -198,7 +201,7 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 10,
                   ),
-                  InkWell(
+                  GestureDetector(
                     onTap: () {
                       // print('here');
                       performWarning();
@@ -236,6 +239,7 @@ class _LoginState extends State<Login> {
                                 begin: -2,
                                 end: 2,
                                 shakeType: ShakeType.Horizonatally,
+                                repeat: true,
                                 duration: Duration(milliseconds: 500),
                                 child: IconButton(
                                     icon: Icon(LineIcons.arrowRight),
@@ -291,7 +295,7 @@ class _LoginState extends State<Login> {
                 SharedPreferences session =
                     await SharedPreferences.getInstance();
                 session.setString('phoneId', phoneId);
-                Navigator.push(
+                Navigator.pushReplacement(
                     context, MaterialPageRoute(builder: (context) => Home()));
               },
               isDefaultAction: false,
@@ -303,24 +307,31 @@ class _LoginState extends State<Login> {
         widget = AlertDialog(
           title: Text('Warning'),
           content: Text(
-              'Data might be lost when device is lost or undergoes reset, are you sure you want to continue without authication?'),
+              'Data might be lost when device is misplaced or undergoes reset, are you sure you want to continue without authenticating?'),
           actions: [
             InkWell(
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Text('No'),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text('No'),
+              ),
             ),
             InkWell(
                 onTap: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                       context, MaterialPageRoute(builder: (context) => Home()));
                 },
-                child: Text('Yes'))
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text('Yes'),
+                ))
           ],
         );
       }
       showDialog(
+        barrierDismissible: false,
           context: context,
           builder: (context) {
             return widget;
@@ -330,14 +341,18 @@ class _LoginState extends State<Login> {
 
   checkIfAccountAddedWhenLocal(SharedPreferences local) async {
     Firestore fs = Firestore.instance;
-    var usr=local.getString('phoneId');
-    if(usr != null){
-      QuerySnapshot check = await fs.collection('codes').where('userId', isEqualTo: usr).getDocuments();
-      if(check.documents.length>0){
+    var usr = local.getString('phoneId');
+    if (usr != null) {
+      QuerySnapshot check = await fs
+          .collection('codes')
+          .where('userId', isEqualTo: usr)
+          .getDocuments();
+      if (check.documents.length > 0) {
         var batch = fs.batch();
-        for(int i = 0;i<check.documents.length;i++){
+        for (int i = 0; i < check.documents.length; i++) {
           DocumentSnapshot d = check.documents[i];
-          batch.updateData(fs.collection('codes').document(d.documentID), {'userId':user.email});
+          batch.updateData(fs.collection('codes').document(d.documentID),
+              {'userId': user.email});
         }
         batch.commit();
       }

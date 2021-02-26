@@ -1,4 +1,7 @@
 
+import 'package:azula_app/utils/animation.dart';
+import 'package:azula_app/utils/random.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +11,7 @@ import 'home.dart';
 import 'login.dart';
 FirebaseUser user;
 String phoneUser;
+DocumentSnapshot appSettings;
 
 class Splash extends StatefulWidget {
   @override
@@ -41,14 +45,14 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
         // animationController.dispose();
         if (user == null) {
           if(phoneUser!=null){
-            Navigator.push(
+            Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => Home()));
           } else {
-            Navigator.push(
+            Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => Login()));
           }
         } else {
-          Navigator.push(
+          Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => Home()));
         }
       }
@@ -65,16 +69,21 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
   }
 
   Future<int> checkAuthentication() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
+    appSettings = await Firestore.instance.collection('app_settings').document('vF0EanG7Jwe9dVVmnFvV').get();
     FirebaseUser usr = await FirebaseAuth.instance.currentUser();
 
     if(usr==null){
       SharedPreferences local = await SharedPreferences.getInstance();
       if(local.getString('phoneId')!=null){
         phoneUser = local.getString('phoneId');
+      } else {
+        phoneUser = generateRandomString(13);
+        local.setString('phoneId', phoneUser);
       }
+    } else{
+      user = usr;
     }
-    user = usr;
     return 1;
   }
 
@@ -118,14 +127,22 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
               // Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
             } else {
               return Center(
-                child: Container(
-                    child: Text(
-                  'Azula.',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 45,
-                      fontWeight: FontWeight.bold),
-                )),
+                child: SamAnimations.fade(
+                  fadeBegin: Colors.amber,
+                  fadeEnd: Colors.black,
+                  repeat: false,
+                  duration: Duration(milliseconds: 500),
+                  builder: (context, animation) {
+                    return Container(
+                        child: Text(
+                      'Azula.',
+                      style: TextStyle(
+                          color: animation.value,
+                          fontSize: 45,
+                          fontWeight: FontWeight.bold),
+                    ));
+                  }
+                ),
               );
             }
           }),
