@@ -64,7 +64,7 @@ class About extends StatelessWidget {
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('Tap to find API documentation'),
+              child: Text('Tap to find API documentation',style:TextStyle(fontWeight: FontWeight.bold)),
             ),
           ),
           Expanded(
