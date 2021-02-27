@@ -8,6 +8,8 @@ class SamAnimations extends StatefulWidget {
   Curve curve;
   bool _shake = false;
   bool _fade = false;
+  bool _scale = false;
+  bool _rotate = false;
   ShakeType shakeType;
   Color fadeBegin;
   Color fadeEnd;
@@ -34,6 +36,18 @@ class SamAnimations extends StatefulWidget {
       {this.fadeBegin, this.fadeEnd, this.repeat, this.duration, this.builder})
       : this._fade = true,
         assert(builder != null),
+        assert(duration != null);
+
+  SamAnimations.scale(
+      {this.begin, this.end, this.repeat, this.duration, this.builder})
+      : this._scale = true,
+        assert(builder != null),
+        assert(duration != null);
+
+  SamAnimations.rotate(
+      {this.begin, this.end, this.repeat, this.duration, this.child})
+      : this._rotate = true,
+        assert(child != null),
         assert(duration != null);
 
   @override
@@ -63,7 +77,7 @@ class _SamAnimationsState extends State<SamAnimations>
       });
       _shakeAnimation.addStatusListener((status) {
         // widget.listenerStatus(status);
-        if(widget.repeat) {
+        if (widget.repeat) {
           if (status == AnimationStatus.completed) {
             _animationController.reverse();
           } else if (status == AnimationStatus.dismissed) {
@@ -75,9 +89,8 @@ class _SamAnimationsState extends State<SamAnimations>
     }
 
     if (widget._fade) {
-      _fadeAnimation =
-          ColorTween(begin: widget.fadeBegin, end: widget.fadeEnd)
-              .animate(_animationController);
+      _fadeAnimation = ColorTween(begin: widget.fadeBegin, end: widget.fadeEnd)
+          .animate(_animationController);
       _fadeAnimation.addListener(() {
         setState(() {
           // widget.listener(true);
@@ -86,7 +99,7 @@ class _SamAnimationsState extends State<SamAnimations>
       });
       _fadeAnimation.addStatusListener((status) {
         // widget.listenerStatus(status);
-        if(widget.repeat) {
+        if (widget.repeat) {
           if (status == AnimationStatus.completed) {
             _animationController.reverse();
           } else if (status == AnimationStatus.dismissed) {

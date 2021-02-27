@@ -14,6 +14,7 @@ import 'package:flutter_signin_button/button_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
 import 'home.dart';
@@ -179,7 +180,7 @@ class _LoginState extends State<Login> {
                           icon: Icon(LineIcons.github,
                               color: Theming.returnItemColor(brightness)),
                           onPressed: () async {
-                            // launch("https://github.com/samuelezedi");
+                            await launch("https://github.com/samuelezedi");
                           }),
                       IconButton(
                           icon: Icon(
@@ -187,13 +188,13 @@ class _LoginState extends State<Login> {
                             color: Theming.returnItemColor(brightness),
                           ),
                           onPressed: () async {
-                            // launch("https://twitter.com/samuelezedi");
+                            await launch("https://twitter.com/samuelezedi");
                           }),
                       IconButton(
                           icon: Icon(LineIcons.instagram,
                               color: Theming.returnItemColor(brightness)),
                           onPressed: () async {
-                            // launch("https://instagram.com/samuelezedi");
+                            await launch("https://instagram.com/samuelezedi");
                           }),
                     ],
                   ),

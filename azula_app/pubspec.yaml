@@ -37,7 +37,7 @@ dependencies:
   line_icons:
   shared_preferences:
   vibration: ^1.7.3
-#  url_launcher: ^5.7.10
+  url_launcher: ^5.7.10
   flutter_signin_button:
     git:
       url: https://github.com/samuelezedi/Flutter-Sign-in-Button
