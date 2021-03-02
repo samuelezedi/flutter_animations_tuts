@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 displayMessage({type, message, scaffoldKey}) {
+  Color sdf = Colors.amber;
   // showMessage
   scaffoldKey?.currentState?.showSnackBar(SnackBar(
     content: Text(

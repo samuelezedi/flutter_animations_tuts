@@ -43,7 +43,7 @@ class _ScannerState extends State<Scanner> {
           onPressed: (){
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios,color: Colors.white,size: 15,),
+          icon: Icon(Icons.arrow_back_ios,color: Theming.returnTextColor(brightness),size: 15,),
         ),
       ),
     backgroundColor: Theming.returnColor(brightness),

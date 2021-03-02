@@ -113,7 +113,7 @@ class _LoginState extends State<Login> {
                           fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
-                      text: "v1.1.0(1)",
+                      text: "${appSettings['version']}",
                       style: TextStyle(
                           color: Theming.returnTextColor(brightness),
                           fontSize: 13),

@@ -60,11 +60,11 @@ class About extends StatelessWidget {
           SizedBox(height: 15,),
           InkWell(
             onTap: ()async{
-              await launch('https://azula.samuelezedi.com');
+              await launch('https://documenter.getpostman.com/view/9201488/TWDdhsqD');
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('Tap to find API documentation',style:TextStyle(fontWeight: FontWeight.bold)),
+              child: Text('Tap to find API documentation',style:TextStyle(color: Theming.returnTextColor(brightness), fontWeight: FontWeight.bold)),
             ),
           ),
           Expanded(
